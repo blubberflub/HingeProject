@@ -1,6 +1,6 @@
 package com.example.hingeproject.hilt
 
-import com.example.hingeproject.profile_feed.repository.ProfileFeedService
+import com.example.hingeproject.user_feed.repository.source.UserFeedService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +24,7 @@ class ServiceModule {
     }
 
     @Provides
-    fun providesProfileFeedService(retrofit: Retrofit): ProfileFeedService {
-        return retrofit.create(ProfileFeedService::class.java)
+    fun providesProfileFeedService(retrofit: Retrofit): UserFeedService {
+        return retrofit.create(UserFeedService::class.java)
     }
 }
