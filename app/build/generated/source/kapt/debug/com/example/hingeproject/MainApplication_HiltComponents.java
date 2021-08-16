@@ -2,6 +2,8 @@ package com.example.hingeproject;
 
 import com.example.hingeproject.hilt.ServiceModule;
 import com.example.hingeproject.user_feed.viewmodel.ProfileFeedViewModel_HiltModules;
+import com.example.hingeproject.user_profile.view.UserProfileFragment_GeneratedInjector;
+import com.example.hingeproject.user_profile.viewmodel.UserProfileViewModel_HiltModules;
 import dagger.Binds;
 import dagger.Component;
 import dagger.Module;
@@ -142,7 +144,8 @@ public final class MainApplication_HiltComponents {
           HiltWrapper_ActivityRetainedComponentManager_LifecycleModule.class,
           ActivityCBuilderModule.class,
           ViewModelCBuilderModule.class,
-          ProfileFeedViewModel_HiltModules.KeyModule.class
+          ProfileFeedViewModel_HiltModules.KeyModule.class,
+          UserProfileViewModel_HiltModules.KeyModule.class
       }
   )
   @ActivityRetainedScoped
@@ -179,7 +182,8 @@ public final class MainApplication_HiltComponents {
   @Subcomponent(
       modules = {
           HiltWrapper_HiltViewModelFactory_ViewModelModule.class,
-          ProfileFeedViewModel_HiltModules.BindsModule.class
+          ProfileFeedViewModel_HiltModules.BindsModule.class,
+          UserProfileViewModel_HiltModules.BindsModule.class
       }
   )
   @ViewModelScoped
@@ -204,7 +208,8 @@ public final class MainApplication_HiltComponents {
       modules = ViewWithFragmentCBuilderModule.class
   )
   @FragmentScoped
-  public abstract static class FragmentC implements FragmentComponent,
+  public abstract static class FragmentC implements UserProfileFragment_GeneratedInjector,
+      FragmentComponent,
       DefaultViewModelFactories.FragmentEntryPoint,
       ViewComponentManager.ViewWithFragmentComponentBuilderEntryPoint,
       GeneratedComponent {

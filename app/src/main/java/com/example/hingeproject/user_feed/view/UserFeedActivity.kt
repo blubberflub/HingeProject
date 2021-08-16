@@ -12,8 +12,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.hingeproject.databinding.ActivityUserFeedBinding
 import com.example.hingeproject.user_feed.repository.model.User
-import com.example.hingeproject.user_feed.view.ProfileFragment
+import com.example.hingeproject.user_feed.repository.model.UserFeed
 import com.example.hingeproject.user_feed.viewmodel.*
+import com.example.hingeproject.user_profile.view.UserProfileFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,11 +25,13 @@ class UserFeedActivity : AppCompatActivity() {
     val profileViewModel: ProfileFeedViewModel by viewModels()
 
     private fun render(viewState: ViewState) {
-        Log.d("testlog", viewState::class.simpleName.toString())
-        when (viewState) {
-            Loading -> showProgressBar(true)
-            is ErrorState -> showError(viewState.message)
-            is ProfileStackState -> showProfileStack(viewState)
+        Log.d("testlog", viewState.toString())
+        showProgressBar(viewState.loading)
+        if (viewState.userList != null && viewState.userInView != null) {
+            showProfileStack(viewState.userList, viewState.userInView)
+        }
+        if (viewState.error != null) {
+            showError(viewState.error)
         }
     }
 
@@ -54,10 +57,9 @@ class UserFeedActivity : AppCompatActivity() {
         profileViewModel.onIntent(Initialized)
     }
 
-    private fun showProfileStack(viewState: ProfileStackState) {
-        showProgressBar(false)
-        profileAdapter.submitList(viewState.userList.users)
-        viewPager.currentItem = viewState.userInView
+    private fun showProfileStack(userFeed: UserFeed, userInView: Int) {
+        profileAdapter.submitList(userFeed.users)
+        viewPager.currentItem = userInView
     }
 
 
@@ -99,7 +101,7 @@ private class ProfilePagerAdapter(
     val profiles = mutableListOf<User>()
 
     override fun createFragment(position: Int) =
-        ProfileFragment(profiles[position])
+        UserProfileFragment.newInstance(profiles[position])
 
     override fun getItemCount() = profiles.size
 

@@ -1,15 +1,11 @@
 package com.example.hingeproject.user_feed.repository
 
 import android.util.Log
-import com.example.hingeproject.common.ErrorResponse
-import com.example.hingeproject.common.NetworkError
-import com.example.hingeproject.common.ResponseWrapper
-import com.example.hingeproject.common.SuccessResponse
-import com.example.hingeproject.common.UnknownError
-import com.example.hingeproject.user_feed.repository.model.UserProfileComposition
+import com.example.hingeproject.common.*
 import com.example.hingeproject.user_feed.repository.model.UserFeed
 import com.example.hingeproject.user_feed.repository.source.UserFeedDAO
 import com.example.hingeproject.user_feed.repository.source.UserFeedService
+import com.example.hingeproject.user_profile.model.UIConfig
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -30,14 +26,17 @@ class UserRepository @Inject constructor(
         }
     }
 
-    suspend fun fetchProfileConfig(): Flow<ResponseWrapper<UserProfileComposition>> {
-        return flow {
-            try {
-                emit(SuccessResponse(userFeedDao.getCachedProfileConfig()))
-                emit(SuccessResponse(userFeedService.getProfileConfig()))
-            } catch (throwable: Throwable) {
-                handleError(throwable)
-            }
+    fun getProfileConfig(): UIConfig {
+        return userFeedDao.getCachedProfileConfig()
+    }
+
+    suspend fun refreshProfileConfig() {
+        try {
+            val response = userFeedService.getProfileConfig()
+
+            userFeedDao.saveProfileConfig(response)
+        } catch (throwable: Throwable) {
+            handleError(throwable)
         }
     }
 

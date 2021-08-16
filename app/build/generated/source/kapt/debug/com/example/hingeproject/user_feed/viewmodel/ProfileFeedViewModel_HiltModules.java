@@ -29,7 +29,7 @@ public final class ProfileFeedViewModel_HiltModules {
 
     @Binds
     @IntoMap
-    @StringKey("com.example.hingeproject.profile_feed.viewmodel.ProfileFeedViewModel")
+    @StringKey("com.example.hingeproject.user_feed.viewmodel.ProfileFeedViewModel")
     @HiltViewModelMap
     public abstract ViewModel binds(ProfileFeedViewModel vm);
   }
@@ -44,7 +44,7 @@ public final class ProfileFeedViewModel_HiltModules {
     @IntoSet
     @HiltViewModelMap.KeySet
     public static String provide() {
-      return "com.example.hingeproject.profile_feed.viewmodel.ProfileFeedViewModel";
+      return "com.example.hingeproject.user_feed.viewmodel.ProfileFeedViewModel";
     }
   }
 }
