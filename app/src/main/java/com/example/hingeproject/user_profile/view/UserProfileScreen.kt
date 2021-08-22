@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +26,7 @@ import com.example.hingeproject.user_profile.viewmodel.ViewState
 
 @Composable
 fun UserProfile(user: User, userProfileViewModel: UserProfileViewModel = viewModel()) {
-    val state = userProfileViewModel.viewState.observeAsState(ViewState(DEFAULT_SECTIONS))
+    val state = userProfileViewModel.viewState.collectAsState()
     val scrollState = rememberScrollState()
 
     Column(

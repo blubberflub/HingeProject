@@ -8,6 +8,8 @@ import com.example.hingeproject.user_feed.repository.UserRepository
 import com.example.hingeproject.user_feed.repository.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -16,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class UserFeedViewModel @Inject constructor(private val userRepository: UserRepository) :
     ViewModel() {
-    val viewState: MutableLiveData<ViewState> = MutableLiveData(ViewState(loading = true))
+    var viewState: MutableStateFlow<ViewState> = MutableStateFlow(ViewState(loading = true))
     private var users = mutableListOf<User>()
     var userFeedIterator: ListIterator<User>? = null
 
@@ -54,7 +56,7 @@ class UserFeedViewModel @Inject constructor(private val userRepository: UserRepo
                 return
             }
 
-            viewState.value = viewState.value?.copy(userInView = it.next())
+            viewState.value = viewState.value.copy(userInView = it.next())
         }
     }
 

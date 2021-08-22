@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,7 +26,7 @@ import com.google.accompanist.pager.PagerState
 @ExperimentalPagerApi
 @Composable
 fun UserFeedScreen(userFeedViewModel: UserFeedViewModel) {
-    val viewState = userFeedViewModel.viewState.observeAsState(ViewState(loading = true)).value
+    val viewState = userFeedViewModel.viewState.collectAsState(ViewState(loading = true)).value
 
     Scaffold(
         topBar = { TopAppBar({ Text(LocalContext.current.getString(R.string.app_title)) }) },

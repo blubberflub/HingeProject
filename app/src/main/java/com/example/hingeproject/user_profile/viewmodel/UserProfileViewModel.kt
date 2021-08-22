@@ -8,6 +8,7 @@ import com.example.hingeproject.user_feed.repository.UserRepository
 import com.example.hingeproject.user_profile.model.Sections
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,7 +27,7 @@ class UserProfileViewModel @Inject constructor(
         )
     }
 
-    val viewState: MutableLiveData<ViewState> = MutableLiveData()
+    val viewState: MutableStateFlow<ViewState> = MutableStateFlow(ViewState(DEFAULT_SECTIONS))
 
     init {
         onIntent(Initialized)
