@@ -1,8 +1,7 @@
 package com.example.hingeproject;
 
 import com.example.hingeproject.hilt.ServiceModule;
-import com.example.hingeproject.user_feed.viewmodel.ProfileFeedViewModel_HiltModules;
-import com.example.hingeproject.user_profile.view.UserProfileFragment_GeneratedInjector;
+import com.example.hingeproject.user_feed.viewmodel.UserFeedViewModel_HiltModules;
 import com.example.hingeproject.user_profile.viewmodel.UserProfileViewModel_HiltModules;
 import dagger.Binds;
 import dagger.Component;
@@ -144,7 +143,7 @@ public final class MainApplication_HiltComponents {
           HiltWrapper_ActivityRetainedComponentManager_LifecycleModule.class,
           ActivityCBuilderModule.class,
           ViewModelCBuilderModule.class,
-          ProfileFeedViewModel_HiltModules.KeyModule.class,
+          UserFeedViewModel_HiltModules.KeyModule.class,
           UserProfileViewModel_HiltModules.KeyModule.class
       }
   )
@@ -167,7 +166,7 @@ public final class MainApplication_HiltComponents {
       }
   )
   @ActivityScoped
-  public abstract static class ActivityC implements UserFeedActivity_GeneratedInjector,
+  public abstract static class ActivityC implements MainActivity_GeneratedInjector,
       ActivityComponent,
       DefaultViewModelFactories.ActivityEntryPoint,
       HiltWrapper_HiltViewModelFactory_ActivityCreatorEntryPoint,
@@ -182,7 +181,7 @@ public final class MainApplication_HiltComponents {
   @Subcomponent(
       modules = {
           HiltWrapper_HiltViewModelFactory_ViewModelModule.class,
-          ProfileFeedViewModel_HiltModules.BindsModule.class,
+          UserFeedViewModel_HiltModules.BindsModule.class,
           UserProfileViewModel_HiltModules.BindsModule.class
       }
   )
@@ -208,8 +207,7 @@ public final class MainApplication_HiltComponents {
       modules = ViewWithFragmentCBuilderModule.class
   )
   @FragmentScoped
-  public abstract static class FragmentC implements UserProfileFragment_GeneratedInjector,
-      FragmentComponent,
+  public abstract static class FragmentC implements FragmentComponent,
       DefaultViewModelFactories.FragmentEntryPoint,
       ViewComponentManager.ViewWithFragmentComponentBuilderEntryPoint,
       GeneratedComponent {

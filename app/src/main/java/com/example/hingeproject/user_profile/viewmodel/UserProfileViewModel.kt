@@ -2,36 +2,70 @@ package com.example.hingeproject.user_profile.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hingeproject.user_feed.repository.UserRepository
-import com.example.hingeproject.user_feed.repository.model.User
-import com.example.hingeproject.user_profile.model.UIConfig
+import com.example.hingeproject.user_profile.model.Sections
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UserProfileViewModel @Inject constructor(val savedStateHandle: SavedStateHandle, val userRepository: UserRepository) : ViewModel() {
+class UserProfileViewModel @Inject constructor(
+    private val userRepository: UserRepository
+) : ViewModel() {
+    companion object {
+        val DEFAULT_SECTIONS = listOf(
+            Sections.NAME,
+            Sections.PHOTO,
+            Sections.GENDER,
+            Sections.ABOUT,
+            Sections.SCHOOL,
+            Sections.HOBBIES
+        )
+    }
+
     val viewState: MutableLiveData<ViewState> = MutableLiveData()
 
+    init {
+        onIntent(Initialized)
+    }
+
     fun onIntent(intent: Intent) {
-        when (intent) {
+        when(intent) {
             Initialized -> fetchAndDisplayUserProfileComposition()
         }
     }
 
     private fun fetchAndDisplayUserProfileComposition() {
         viewModelScope.launch {
-            val uiConfig = userRepository.getProfileConfig()
+            try {
+                val uiConfig = userRepository.getProfileConfig().profile
+                    .map { it.uppercase() }
+                    .filter { validSection(it) }
+                    .map { enumValueOf<Sections>(it) }
 
-            savedStateHandle.get<User>("user")?.also {
-                viewState.value = ViewState(uiConfig, it)
+                viewState.value = ViewState(uiConfig)
+            } catch(throwable: Throwable) {
+                //Intentionally not show error to user if uiConfig is not fetched
             }
         }
-//        userRepository.getProfileConfig()
+    }
+
+    private fun validSection(sectionString: String): Boolean {
+        return Sections.values()
+            .contains(enumValueOf(sectionString))
+            .also { contains ->
+                if (!contains) {
+                    Log.e(UserProfileViewModel::class.simpleName, "Cannot render section: $sectionString")
+                }
+            }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.cancel()
     }
 }
 
@@ -39,4 +73,4 @@ sealed class Intent
 
 object Initialized : Intent()
 
-data class ViewState(val uiConfig: UIConfig, val user: User)
+data class ViewState(val uiConfig: List<Sections>)

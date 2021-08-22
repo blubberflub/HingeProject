@@ -14,9 +14,8 @@ import com.example.hingeproject.hilt.ServiceModule_ProvidesUserProfileDAOFactory
 import com.example.hingeproject.user_feed.repository.UserRepository;
 import com.example.hingeproject.user_feed.repository.source.UserFeedDAO;
 import com.example.hingeproject.user_feed.repository.source.UserFeedService;
-import com.example.hingeproject.user_feed.viewmodel.ProfileFeedViewModel;
-import com.example.hingeproject.user_feed.viewmodel.ProfileFeedViewModel_HiltModules_KeyModule_ProvideFactory;
-import com.example.hingeproject.user_profile.view.UserProfileFragment;
+import com.example.hingeproject.user_feed.viewmodel.UserFeedViewModel;
+import com.example.hingeproject.user_feed.viewmodel.UserFeedViewModel_HiltModules_KeyModule_ProvideFactory;
 import com.example.hingeproject.user_profile.viewmodel.UserProfileViewModel;
 import com.example.hingeproject.user_profile.viewmodel.UserProfileViewModel_HiltModules_KeyModule_ProvideFactory;
 import dagger.hilt.android.ActivityRetainedLifecycle;
@@ -335,10 +334,6 @@ public final class DaggerMainApplication_HiltComponents_SingletonC extends MainA
     }
 
     @Override
-    public void injectUserProfileFragment(UserProfileFragment userProfileFragment) {
-    }
-
-    @Override
     public DefaultViewModelFactories.InternalFactoryFactory getHiltInternalFactoryFactory() {
       return activityCImpl.getHiltInternalFactoryFactory();
     }
@@ -384,7 +379,7 @@ public final class DaggerMainApplication_HiltComponents_SingletonC extends MainA
     }
 
     @Override
-    public void injectUserFeedActivity(UserFeedActivity userFeedActivity) {
+    public void injectMainActivity(MainActivity mainActivity) {
     }
 
     @Override
@@ -394,7 +389,7 @@ public final class DaggerMainApplication_HiltComponents_SingletonC extends MainA
 
     @Override
     public Set<String> getViewModelKeys() {
-      return SetBuilder.<String>newSetBuilder(2).add(ProfileFeedViewModel_HiltModules_KeyModule_ProvideFactory.provide()).add(UserProfileViewModel_HiltModules_KeyModule_ProvideFactory.provide()).build();
+      return SetBuilder.<String>newSetBuilder(2).add(UserFeedViewModel_HiltModules_KeyModule_ProvideFactory.provide()).add(UserProfileViewModel_HiltModules_KeyModule_ProvideFactory.provide()).build();
     }
 
     @Override
@@ -414,15 +409,13 @@ public final class DaggerMainApplication_HiltComponents_SingletonC extends MainA
   }
 
   private static final class ViewModelCImpl extends MainApplication_HiltComponents.ViewModelC {
-    private final SavedStateHandle savedStateHandle;
-
     private final DaggerMainApplication_HiltComponents_SingletonC singletonC;
 
     private final ActivityRetainedCImpl activityRetainedCImpl;
 
     private final ViewModelCImpl viewModelCImpl = this;
 
-    private Provider<ProfileFeedViewModel> profileFeedViewModelProvider;
+    private Provider<UserFeedViewModel> userFeedViewModelProvider;
 
     private Provider<UserProfileViewModel> userProfileViewModelProvider;
 
@@ -430,7 +423,7 @@ public final class DaggerMainApplication_HiltComponents_SingletonC extends MainA
         ActivityRetainedCImpl activityRetainedCImpl, SavedStateHandle savedStateHandleParam) {
       this.singletonC = singletonC;
       this.activityRetainedCImpl = activityRetainedCImpl;
-      this.savedStateHandle = savedStateHandleParam;
+
       initialize(savedStateHandleParam);
 
     }
@@ -439,23 +432,23 @@ public final class DaggerMainApplication_HiltComponents_SingletonC extends MainA
       return new UserRepository(singletonC.userFeedService(), singletonC.userFeedDAO());
     }
 
-    private ProfileFeedViewModel profileFeedViewModel() {
-      return new ProfileFeedViewModel(userRepository());
+    private UserFeedViewModel userFeedViewModel() {
+      return new UserFeedViewModel(userRepository());
     }
 
     private UserProfileViewModel userProfileViewModel() {
-      return new UserProfileViewModel(savedStateHandle, userRepository());
+      return new UserProfileViewModel(userRepository());
     }
 
     @SuppressWarnings("unchecked")
     private void initialize(final SavedStateHandle savedStateHandleParam) {
-      this.profileFeedViewModelProvider = new SwitchingProvider<>(singletonC, activityRetainedCImpl, viewModelCImpl, 0);
+      this.userFeedViewModelProvider = new SwitchingProvider<>(singletonC, activityRetainedCImpl, viewModelCImpl, 0);
       this.userProfileViewModelProvider = new SwitchingProvider<>(singletonC, activityRetainedCImpl, viewModelCImpl, 1);
     }
 
     @Override
     public Map<String, Provider<ViewModel>> getHiltViewModelMap() {
-      return MapBuilder.<String, Provider<ViewModel>>newMapBuilder(2).put("com.example.hingeproject.user_feed.viewmodel.ProfileFeedViewModel", (Provider) profileFeedViewModelProvider).put("com.example.hingeproject.user_profile.viewmodel.UserProfileViewModel", (Provider) userProfileViewModelProvider).build();
+      return MapBuilder.<String, Provider<ViewModel>>newMapBuilder(2).put("com.example.hingeproject.user_feed.viewmodel.UserFeedViewModel", (Provider) userFeedViewModelProvider).put("com.example.hingeproject.user_profile.viewmodel.UserProfileViewModel", (Provider) userProfileViewModelProvider).build();
     }
 
     private static final class SwitchingProvider<T> implements Provider<T> {
@@ -479,8 +472,8 @@ public final class DaggerMainApplication_HiltComponents_SingletonC extends MainA
       @Override
       public T get() {
         switch (id) {
-          case 0: // com.example.hingeproject.user_feed.viewmodel.ProfileFeedViewModel 
-          return (T) viewModelCImpl.profileFeedViewModel();
+          case 0: // com.example.hingeproject.user_feed.viewmodel.UserFeedViewModel 
+          return (T) viewModelCImpl.userFeedViewModel();
 
           case 1: // com.example.hingeproject.user_profile.viewmodel.UserProfileViewModel 
           return (T) viewModelCImpl.userProfileViewModel();
